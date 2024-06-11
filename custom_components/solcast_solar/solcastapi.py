@@ -16,6 +16,7 @@ import asyncio
 import async_timeout
 from aiohttp.client_reqrep import ClientResponse
 from isodate import parse_datetime
+import aiofiles
 
 _JSON_VERSION = 2
 _LOGGER = logging.getLogger(__name__)
@@ -122,7 +123,7 @@ class SolcastApi:
             if len(self._sites) > 0:
                 self._data = []
                 if not self.apiCacheEnabled and file_exists(self._filename):
-                    with open(self._filename) as data_file:
+                    with aiofiles.open(self._filename) as data_file:
                         jsonData = json.load(data_file, cls=JSONDecoder)
                         _LOGGER.debug(f"SOLCAST: load_saved_data file exists.. file type is {type(jsonData)}")
                         if jsonData.get("version", 1) == _JSON_VERSION:
